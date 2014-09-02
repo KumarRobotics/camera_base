@@ -18,11 +18,11 @@ class CameraRosBase {
         it_{nh},
         camera_publisher_{it_.advertiseCamera("image_raw", 1)},
         cinfo_manager_{nh},
-        fps_{1},
+        fps_{10},
         topic_diagnostic_{
             "image_raw", diagnostic_updater_,
             diagnostic_updater::FrequencyStatusParam(&fps_, &fps_, 0.1, 10),
-            diagnostic_updater::TimeStampStatusParam(0, 2 / fps_)} {
+            diagnostic_updater::TimeStampStatusParam(0, 0.05)} {
     nh_.param<std::string>("frame_id", frame_id_, "camera");
     // Setup camera info manager
     std::string camera;
