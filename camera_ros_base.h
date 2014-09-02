@@ -24,6 +24,7 @@ class CameraRosBase {
             diagnostic_updater::FrequencyStatusParam(&fps_, &fps_, 0.1, 10),
             diagnostic_updater::TimeStampStatusParam(0, 0.05)} {
     nh_.param<std::string>("frame_id", frame_id_, "camera");
+    nh_.param<std::string>("identifier", identifier_, "");
     // Setup camera info manager
     std::string camera;
     std::string calib_url;
@@ -39,16 +40,18 @@ class CameraRosBase {
     image_msg_.reset(new sensor_msgs::Image());
     cinfo_msg_.reset(
         new sensor_msgs::CameraInfo(cinfo_manager_.getCameraInfo()));
-    diagnostic_updater_.setHardwareID("camera");
   }
 
   CameraRosBase(const CameraRosBase&) = delete;
   CameraRosBase& operator=(const CameraRosBase&) = delete;
   virtual ~CameraRosBase() = default;
 
-  void set_fps(double fps) { fps_ = fps; }
+  const std::string& identifier() const { return identifier_; }
 
-  virtual bool Grab(const sensor_msgs::ImagePtr& image_msg) = 0;
+  void set_fps(double fps) { fps_ = fps; }
+  void SetHardwareId(const std::string& id) {
+    diagnostic_updater_.setHardwareID(id);
+  }
 
   void Publish(const ros::Time& time) {
     cinfo_msg_->header.stamp = time;
@@ -60,6 +63,8 @@ class CameraRosBase {
     }
     diagnostic_updater_.update();
   }
+
+  virtual bool Grab(const sensor_msgs::ImagePtr& image_msg) = 0;
 
  private:
   std::string ResolveParam(const std::string& prefix,
@@ -78,6 +83,7 @@ class CameraRosBase {
   diagnostic_updater::Updater diagnostic_updater_;
   diagnostic_updater::TopicDiagnostic topic_diagnostic_;
   std::string frame_id_;
+  std::string identifier_;
 };
 
 #endif  // ROS_CAMERA_BASE_H_
