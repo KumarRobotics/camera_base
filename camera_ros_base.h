@@ -24,7 +24,7 @@ class CameraRosBase {
             diagnostic_updater::FrequencyStatusParam(&fps_, &fps_, 0.1, 10),
             diagnostic_updater::TimeStampStatusParam(0, 0.05)} {
     nh_.param<std::string>("frame_id", frame_id_, "camera");
-    nh_.param<std::string>("identifier", identifier_, "");
+    nh_.getParam(ResolveParam(prefix, "identifier"), identifier_);
     // Setup camera info manager
     std::string camera;
     std::string calib_url;
@@ -48,6 +48,7 @@ class CameraRosBase {
 
   const std::string& identifier() const { return identifier_; }
 
+  double fps() const { return fps_; }
   void set_fps(double fps) { fps_ = fps; }
   void SetHardwareId(const std::string& id) {
     diagnostic_updater_.setHardwareID(id);
