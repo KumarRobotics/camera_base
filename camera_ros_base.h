@@ -16,8 +16,8 @@ class CameraRosBase {
                 const std::string& prefix = std::string())
       : nh_{nh},
         cnh_{nh, prefix},
-        it_{nh},
-        camera_pub_{it_.advertiseCamera(ResolveName(prefix, "image_raw"), 1)},
+        it_{cnh_},
+        camera_pub_{it_.advertiseCamera("image_raw", 1)},
         cinfo_mgr_{cnh_},
         fps_{10},
         topic_diagnostic_{
