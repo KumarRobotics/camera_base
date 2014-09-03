@@ -25,12 +25,12 @@ class CameraRosBase {
             diagnostic_updater::FrequencyStatusParam(&fps_, &fps_, 0.1, 10),
             diagnostic_updater::TimeStampStatusParam(0, 0.05)} {
     nh_.param<std::string>("frame_id", frame_id_, "camera");
-    nh_.getParam(ResolveName(prefix, "identifier"), identifier_);
+    cnh_.getParam("identifier", identifier_);
     // Setup camera info manager
     std::string camera;
     std::string calib_url;
-    nh_.getParam("camera", camera);
-    nh_.getParam(ResolveName(prefix, "calib_url"), calib_url);
+    cnh_.getParam("camera", camera);
+    cnh_.getParam("calib_url", calib_url);
     if (cinfo_mgr_.setCameraName(camera) && cinfo_mgr_.validateURL(calib_url) &&
         cinfo_mgr_.loadCameraInfo(calib_url)) {
       if (!cinfo_mgr_.isCalibrated()) {
@@ -67,11 +67,6 @@ class CameraRosBase {
   virtual bool Grab(const sensor_msgs::ImagePtr& image_msg) = 0;
 
  private:
-  std::string ResolveName(const std::string& prefix, const std::string& param) {
-    return nh_.resolveName(prefix.empty() ? param
-                                          : ros::names::append(prefix, param));
-  }
-
   ros::NodeHandle nh_;
   ros::NodeHandle cnh_;
   image_transport::ImageTransport it_;
