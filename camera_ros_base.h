@@ -54,10 +54,11 @@ class CameraRosBase {
   }
 
   void Publish(const ros::Time& time) {
-    cinfo_msg_->header.stamp = time;
-    cinfo_msg_->header.frame_id = frame_id_;
-    image_msg_->header = cinfo_msg_->header;
+    image_msg_->header.frame_id = frame_id_;
+    image_msg_->header.stamp = time;
     if (Grab(image_msg_)) {
+      // Update camera info header
+      cinfo_msg_->header = image_msg_->header;
       camera_pub_.publish(image_msg_, cinfo_msg_);
       topic_diagnostic_.tick(image_msg_->header.stamp);
     }
