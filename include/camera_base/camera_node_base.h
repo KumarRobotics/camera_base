@@ -48,11 +48,11 @@ class CameraNodeBase {
   virtual void Setup(ConfigType& config) = 0;
 
  private:
-  void SetRate(double fps) { rate_.reset(new ros::Rate(fps)); }
+  void SetRate(double fps) { rate_.reset(new ros::Rate{fps}); }
 
   void Start() {
     is_acquire_ = true;
-    acquire_thread_.reset(new std::thread(&CameraNodeBase::Acquire, this));
+    acquire_thread_.reset(new std::thread{&CameraNodeBase::Acquire, this});
   }
 
   void Stop() {

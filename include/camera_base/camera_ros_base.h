@@ -13,7 +13,7 @@
 class CameraRosBase {
  public:
   CameraRosBase(const ros::NodeHandle& nh,
-                const std::string& prefix = std::string())
+                const std::string& prefix = std::string{})
       : nh_{nh},
         cnh_{nh, prefix},
         it_{cnh_},
@@ -22,8 +22,8 @@ class CameraRosBase {
         fps_{10},
         topic_diagnostic_{
             "image_raw", diagnostic_updater_,
-            diagnostic_updater::FrequencyStatusParam(&fps_, &fps_, 0.1, 10),
-            diagnostic_updater::TimeStampStatusParam(0, 0.05)} {
+            diagnostic_updater::FrequencyStatusParam{&fps_, &fps_, 0.1, 10},
+            diagnostic_updater::TimeStampStatusParam{0, 0.05}} {
     nh_.param<std::string>("frame_id", frame_id_, "camera");
     cnh_.getParam("identifier", identifier_);
     // Setup camera info manager
@@ -37,8 +37,8 @@ class CameraRosBase {
         ROS_WARN_STREAM(camera << " not calibarted.");
       }
     }
-    image_msg_.reset(new sensor_msgs::Image());
-    cinfo_msg_.reset(new sensor_msgs::CameraInfo(cinfo_mgr_.getCameraInfo()));
+    image_msg_.reset(new sensor_msgs::Image{});
+    cinfo_msg_.reset(new sensor_msgs::CameraInfo{cinfo_mgr_.getCameraInfo()});
   }
 
   CameraRosBase(const CameraRosBase&) = delete;
