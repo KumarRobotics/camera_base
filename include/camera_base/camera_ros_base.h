@@ -23,7 +23,7 @@ class CameraRosBase {
         topic_diagnostic_(
             "image_raw", diagnostic_updater_,
             diagnostic_updater::FrequencyStatusParam(&fps_, &fps_, 0.1, 10),
-            diagnostic_updater::TimeStampStatusParam(0, 0.05)) {
+            diagnostic_updater::TimeStampStatusParam(0, 0.1)) {
     nh_.param<std::string>("frame_id", frame_id_, "camera");
     cnh_.getParam("identifier", identifier_);
     // Setup camera info manager
