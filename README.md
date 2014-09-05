@@ -27,3 +27,7 @@ Contains the camera calibration (if calibrated) and extra data about the camera 
 ### Services
 `set_camera_info` ([sensor_msgs/SetCameraInfo](http://docs.ros.org/api/sensor_msgs/html/msg/CameraInfo.html))  
 Set the appropriate camera info (TF frame, calibration parameters, ROI etc.)
+
+## Style
+C++11  
+Google style
