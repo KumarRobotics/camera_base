@@ -11,7 +11,6 @@ Base class for a camera node. The node will have a dynamic reconfigure server.
 ```(c++)
 virtual void Acquire() = 0;
 virtual void Setup(ConfigType& config) = 0;
-
 ```
 
 ### camera_ros_base
