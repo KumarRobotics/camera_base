@@ -1,6 +1,6 @@
 # camera_base
 
-A base class for writing ROS camera driver node.
+Some base classes for simplifing ROS camera driver node.
 
 ## camera_node_base
 
