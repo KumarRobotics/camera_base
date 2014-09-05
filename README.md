@@ -18,7 +18,12 @@ Base class for a ros camera. A Ros camera will have the following common feature
 ## ROS API 
 
 ### Published topics
-image_raw ([sensor_msgs/Image](http://docs.ros.org/api/sensor_msgs/html/msg/Image.html))
-The unprocessed image data.
-camera_info (sensor_msgs/CameraInfo)
+`image_raw` ([sensor_msgs/Image](http://docs.ros.org/api/sensor_msgs/html/msg/Image.html))    
+    The unprocessed image data.
+
+`camera_info` ([sensor_msgs/CameraInfo](http://docs.ros.org/api/sensor_msgs/html/msg/CameraInfo.html))    
 Contains the camera calibration (if calibrated) and extra data about the camera configuration.
+
+### Services
+`set_camera_info` ([sensor_msgs/SetCameraInfo](http://docs.ros.org/api/sensor_msgs/html/msg/CameraInfo.html))  
+Set the appropriate camera info (TF frame, calibration parameters, ROI etc.)
