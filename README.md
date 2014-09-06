@@ -28,16 +28,20 @@ virtual bool Grab(const sensor_msgs::ImagePtr& image_msg) = 0;
 ## ROS API 
 
 ### Published topics
-`image_raw` ([sensor_msgs/Image](http://docs.ros.org/api/sensor_msgs/html/msg/Image.html))    
+`~image_raw` ([sensor_msgs/Image](http://docs.ros.org/api/sensor_msgs/html/msg/Image.html))    
     The unprocessed image data.
 
-`camera_info` ([sensor_msgs/CameraInfo](http://docs.ros.org/api/sensor_msgs/html/msg/CameraInfo.html))    
+`~camera_info` ([sensor_msgs/CameraInfo](http://docs.ros.org/api/sensor_msgs/html/msg/CameraInfo.html))    
 Contains the camera calibration (if calibrated) and extra data about the camera configuration.
 
 ### Services
-`set_camera_info` ([sensor_msgs/SetCameraInfo](http://docs.ros.org/api/sensor_msgs/html/msg/CameraInfo.html))  
+`~set_camera_info` ([sensor_msgs/SetCameraInfo](http://docs.ros.org/api/sensor_msgs/html/msg/CameraInfo.html))  
 Set the appropriate camera info (TF frame, calibration parameters, ROI etc.)
 
+### Parameters
+
+Dynamically Reconfigurable Parameters.  
+See the [dynamic_reconfigure](http://wiki.ros.org/dynamic_reconfigure) package for details on dynamically reconfigurable parameters.
 ## Style
 C++11  
 Google style
