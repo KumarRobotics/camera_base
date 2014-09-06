@@ -56,7 +56,7 @@ class CameraRosBase {
   void Publish(const ros::Time& time) {
     image_msg_->header.frame_id = frame_id_;
     image_msg_->header.stamp = time;
-    if (Grab(image_msg_)) {
+    if (Grab(image_msg_, cinfo_msg_)) {
       // Update camera info header
       cinfo_msg_->header = image_msg_->header;
       camera_pub_.publish(image_msg_, cinfo_msg_);
@@ -65,7 +65,8 @@ class CameraRosBase {
     diagnostic_updater_.update();
   }
 
-  virtual bool Grab(const sensor_msgs::ImagePtr& image_msg) = 0;
+  virtual bool Grab(const sensor_msgs::ImagePtr& image_msg,
+                    const sensor_msgs::CameraInfoPtr& cinfo_msg) = 0;
 
  private:
   ros::NodeHandle nh_;
