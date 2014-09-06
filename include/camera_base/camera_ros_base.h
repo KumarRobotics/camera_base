@@ -46,14 +46,16 @@ class CameraRosBase {
   virtual ~CameraRosBase() = default;
 
   const std::string& identifier() const { return identifier_; }
+  const std::string& frame_id() const { return frame_id_; }
 
   double fps() const { return fps_; }
   void set_fps(double fps) { fps_ = fps; }
+
   void SetHardwareId(const std::string& id) {
     diagnostic_updater_.setHardwareID(id);
   }
 
-  void Publish(const ros::Time& time) {
+  void PublishCamera(const ros::Time& time) {
     image_msg_->header.frame_id = frame_id_;
     image_msg_->header.stamp = time;
     if (Grab(image_msg_, cinfo_msg_)) {
