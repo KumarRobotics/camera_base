@@ -14,16 +14,16 @@ class CameraRosBase {
  public:
   CameraRosBase(const ros::NodeHandle& nh,
                 const std::string& prefix = std::string{})
-      : nh_{nh},
-        cnh_{nh, prefix},
-        it_{cnh_},
-        camera_pub_{it_.advertiseCamera("image_raw", 1)},
-        cinfo_mgr_{cnh_},
-        fps_{10},
+      : nh_(nh),
+        cnh_(nh, prefix),
+        it_(cnh_),
+        camera_pub_(it_.advertiseCamera("image_raw", 1)),
+        cinfo_mgr_(cnh_),
+        fps_(10),
         topic_diagnostic_(
             "image_raw", diagnostic_updater_,
             diagnostic_updater::FrequencyStatusParam(&fps_, &fps_, 0.1, 10),
-            diagnostic_updater::TimeStampStatusParam(0, 0.1)) {
+            diagnostic_updater::TimeStampStatusParam(-0.01, 0.1)) {
     nh_.param<std::string>("frame_id", frame_id_, "camera");
     cnh_.getParam("identifier", identifier_);
     // Setup camera info manager

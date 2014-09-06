@@ -12,7 +12,7 @@
 template <typename ConfigType>
 class CameraNodeBase {
  public:
-  CameraNodeBase(const ros::NodeHandle& nh) : is_acquire_{false}, nh_{nh} {}
+  CameraNodeBase(const ros::NodeHandle& nh) : is_acquire_(false), nh_(nh) {}
 
   CameraNodeBase(const CameraNodeBase&) = delete;
   CameraNodeBase& operator=(const CameraNodeBase&) = delete;
