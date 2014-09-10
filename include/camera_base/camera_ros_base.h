@@ -10,6 +10,7 @@
 #include <diagnostic_updater/publisher.h>
 #include <diagnostic_updater/diagnostic_updater.h>
 
+namespace {
 template <typename T>
 T getParam(const ros::NodeHandle& nh, const std::string& name) {
   T value;
@@ -18,17 +19,18 @@ T getParam(const ros::NodeHandle& nh, const std::string& name) {
   }
   return value;
 }
+}
 
 class CameraRosBase {
  public:
   CameraRosBase(const ros::NodeHandle& nh,
-                const std::string& prefix = std::string{})
+                const std::string& prefix = std::string())
       : nh_(nh),
         cnh_(nh, prefix),
         it_(cnh_),
         camera_pub_(it_.advertiseCamera("image_raw", 1)),
-        cinfo_mgr_(cnh_, getParam<std::string>(cnh_, "camera"),
-                   getParam<std::string>(cnh_, "calib_url")),
+        cinfo_mgr_(cnh_, ::getParam<std::string>(cnh_, "camera"),
+                   ::getParam<std::string>(cnh_, "calib_url")),
         image_msg_(new sensor_msgs::Image()),
         cinfo_msg_(new sensor_msgs::CameraInfo(cinfo_mgr_.getCameraInfo())),
         fps_(10),
