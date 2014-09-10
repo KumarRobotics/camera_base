@@ -10,6 +10,15 @@
 #include <diagnostic_updater/publisher.h>
 #include <diagnostic_updater/diagnostic_updater.h>
 
+template <typename T>
+T getParam(const ros::NodeHandle& nh, const std::string& name) {
+  T value;
+  if (!nh.getParam(name, value)) {
+    ROS_ERROR("Cannot find parameter: %s", name.c_str());
+  }
+  return value;
+}
+
 class CameraRosBase {
  public:
   CameraRosBase(const ros::NodeHandle& nh,
@@ -18,7 +27,10 @@ class CameraRosBase {
         cnh_(nh, prefix),
         it_(cnh_),
         camera_pub_(it_.advertiseCamera("image_raw", 1)),
-        cinfo_mgr_(cnh_),
+        cinfo_mgr_(cnh_, getParam<std::string>(cnh_, "camera"),
+                   getParam<std::string>(cnh_, "calib_url")),
+        image_msg_(new sensor_msgs::Image()),
+        cinfo_msg_(new sensor_msgs::CameraInfo(cinfo_mgr_.getCameraInfo())),
         fps_(10),
         topic_diagnostic_(
             "image_raw", diagnostic_updater_,
@@ -26,19 +38,6 @@ class CameraRosBase {
             diagnostic_updater::TimeStampStatusParam(-0.01, 0.1)) {
     nh_.param<std::string>("frame_id", frame_id_, "camera");
     cnh_.getParam("identifier", identifier_);
-    // Setup camera info manager
-    std::string camera;
-    std::string calib_url;
-    cnh_.getParam("camera", camera);
-    cnh_.getParam("calib_url", calib_url);
-    if (cinfo_mgr_.setCameraName(camera) && cinfo_mgr_.validateURL(calib_url) &&
-        cinfo_mgr_.loadCameraInfo(calib_url)) {
-      if (!cinfo_mgr_.isCalibrated()) {
-        ROS_WARN_STREAM(camera << " not calibarted.");
-      }
-    }
-    image_msg_.reset(new sensor_msgs::Image());
-    cinfo_msg_.reset(new sensor_msgs::CameraInfo(cinfo_mgr_.getCameraInfo()));
   }
 
   CameraRosBase(const CameraRosBase&) = delete;
