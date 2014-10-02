@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
     <name>camera_base</name>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <description>The camera_base package</description>
 
     <maintainer email="quchao@seas.upenn.edu">Chao Qu</maintainer>
@@ -23,5 +23,4 @@
     <run_depend>image_transport</run_depend>
     <run_depend>roscpp</run_depend>
     <run_depend>sensor_msgs</run_depend>
-
 </package>

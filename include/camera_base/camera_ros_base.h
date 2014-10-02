@@ -29,7 +29,7 @@ class CameraRosBase {
         cnh_(nh, prefix),
         it_(cnh_),
         camera_pub_(it_.advertiseCamera("image_raw", 1)),
-        cinfo_mgr_(cnh_, ::getParam<std::string>(cnh_, "camera"),
+        cinfo_mgr_(cnh_, ::getParam<std::string>(cnh_, "camera_name"),
                    ::getParam<std::string>(cnh_, "calib_url")),
         image_msg_(new sensor_msgs::Image()),
         cinfo_msg_(new sensor_msgs::CameraInfo(cinfo_mgr_.getCameraInfo())),
@@ -39,7 +39,7 @@ class CameraRosBase {
             diagnostic_updater::FrequencyStatusParam(&fps_, &fps_, 0.1, 10),
             diagnostic_updater::TimeStampStatusParam(-0.01, 0.1)) {
     nh_.param<std::string>("frame_id", frame_id_, "camera");
-    cnh_.getParam("identifier", identifier_);
+    cnh_.param<std::string>("identifier", identifier_, "");
   }
 
   CameraRosBase(const CameraRosBase&) = delete;
