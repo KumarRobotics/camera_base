@@ -34,7 +34,7 @@ class CameraNodeBase {
   void ConfigCb(ConfigType& config, int level) {
     if (level < 0) {
       ROS_INFO("%s: %s", nh().getNamespace().c_str(),
-               "Initializaing reconfigure server");
+               "Initializing reconfigure server");
     }
     if (is_acquire()) {
       Stop();
