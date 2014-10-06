@@ -21,6 +21,8 @@ T getParam(const ros::NodeHandle& nh, const std::string& name) {
 }
 }
 
+namespace camera_base {
+
 class CameraRosBase {
  public:
   CameraRosBase(const ros::NodeHandle& nh,
@@ -85,5 +87,7 @@ class CameraRosBase {
   std::string frame_id_;
   std::string identifier_;
 };
+
+}  // namespace camera_base
 
 #endif  // ROS_CAMERA_BASE_H_

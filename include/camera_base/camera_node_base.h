@@ -9,6 +9,8 @@
 
 #include "camera_base/camera_ros_base.h"
 
+namespace camera_base {
+
 template <typename ConfigType>
 class CameraNodeBase {
  public:
@@ -68,5 +70,7 @@ class CameraNodeBase {
   std::unique_ptr<std::thread> acquire_thread_;
   dynamic_reconfigure::Server<ConfigType> cfg_server_;
 };
+
+}  // namespace camera_base
 
 #endif  // CAMERA_NODE_BASE_H_
