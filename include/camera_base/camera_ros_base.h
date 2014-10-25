@@ -40,6 +40,7 @@ class CameraRosBase {
             diagnostic_updater::TimeStampStatusParam(-0.01, 0.1)) {
     nh_.param<std::string>("frame_id", frame_id_, "camera");
     cnh_.param<std::string>("identifier", identifier_, "");
+    cnh_.param<bool>("flip", flip_, false);
   }
 
   CameraRosBase(const CameraRosBase&) = delete;
@@ -48,6 +49,7 @@ class CameraRosBase {
 
   const std::string& identifier() const { return identifier_; }
   const std::string& frame_id() const { return frame_id_; }
+  const bool& flip() const { return flip_; }
 
   double fps() const { return fps_; }
   void set_fps(double fps) { fps_ = fps; }
@@ -84,6 +86,7 @@ class CameraRosBase {
   diagnostic_updater::TopicDiagnostic topic_diagnostic_;
   std::string frame_id_;
   std::string identifier_;
+  bool flip_;
 };
 
 }  // namespace camera_base
