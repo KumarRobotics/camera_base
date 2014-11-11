@@ -11,12 +11,17 @@
 
 namespace camera_base {
 
+/**
+ * @brief The CameraNodeBase class
+ * A base class that implements a ros node for a camera
+ */
 template <typename ConfigType>
 class CameraNodeBase {
  public:
-  CameraNodeBase(const ros::NodeHandle& nh)
+  explicit CameraNodeBase(const ros::NodeHandle& nh)
       : is_acquire_(false), nh_(nh), cfg_server_(nh) {}
 
+  CameraNodeBase() = delete;
   CameraNodeBase(const CameraNodeBase&) = delete;
   CameraNodeBase& operator=(const CameraNodeBase&) = delete;
   virtual ~CameraNodeBase() = default;
@@ -24,15 +29,30 @@ class CameraNodeBase {
   const ros::NodeHandle& nh() const { return nh_; }
   bool is_acquire() const { return is_acquire_; }
 
+  /**
+   * @brief Run Run the node
+   * This will setup the dynamic reconfigure server, this will start the
+   * acquisition automatically when the server is initialized
+   */
   void Run() {
     cfg_server_.setCallback(
         boost::bind(&CameraNodeBase::ConfigCb, this, _1, _2));
   }
 
+  /**
+   * @brief End
+   */
   void End() { Stop(); }
 
   void Sleep() const { rate_->sleep(); }
 
+  /**
+   * @brief ConfigCb Dynamic reconfigure callback
+   * @param config Config type
+   * @param level Reconfigure level, not really used
+   * Entering this callback will stop the acquisition thread, do the
+   * reconfiguration and restart acquisition thread
+   */
   void ConfigCb(ConfigType& config, int level) {
     if (level < 0) {
       ROS_INFO("%s: %s", nh().getNamespace().c_str(),
@@ -46,8 +66,15 @@ class CameraNodeBase {
     Start();
   }
 
+  /**
+   * @brief Acquire Do acquisition here
+   */
   virtual void Acquire() = 0;
 
+  /**
+   * @brief Setup Setup your camera here
+   * @param config Config type
+   */
   virtual void Setup(ConfigType& config) = 0;
 
  private:

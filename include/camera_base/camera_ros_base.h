@@ -12,19 +12,29 @@
 
 namespace camera_base {
 
+/**
+ * @brief getParam Util function for getting ros parameters under nodehandle
+ * @param nh Node handle
+ * @param name Parameter name
+ * @return Parameter value
+ */
 template <typename T>
 T getParam(const ros::NodeHandle& nh, const std::string& name) {
-  T value;
+  T value{};
   if (!nh.getParam(name, value)) {
     ROS_ERROR("Cannot find parameter: %s", name.c_str());
   }
   return value;
 }
 
+/**
+ * @brief The CameraRosBase class
+ * This class implements a ros camera
+ */
 class CameraRosBase {
  public:
-  CameraRosBase(const ros::NodeHandle& nh,
-                const std::string& prefix = std::string())
+  explicit CameraRosBase(const ros::NodeHandle& nh,
+                         const std::string& prefix = std::string())
       : nh_(nh),
         cnh_(nh, prefix),
         it_(cnh_),
@@ -42,6 +52,7 @@ class CameraRosBase {
     cnh_.param<std::string>("identifier", identifier_, "");
   }
 
+  CameraRosBase() = delete;
   CameraRosBase(const CameraRosBase&) = delete;
   CameraRosBase& operator=(const CameraRosBase&) = delete;
   virtual ~CameraRosBase() = default;
@@ -52,10 +63,18 @@ class CameraRosBase {
   double fps() const { return fps_; }
   void set_fps(double fps) { fps_ = fps; }
 
+  /**
+   * @brief SetHardwareId Set hardware id for diagnostic updater
+   * @param id harware id
+   */
   void SetHardwareId(const std::string& id) {
     diagnostic_updater_.setHardwareID(id);
   }
 
+  /**
+   * @brief PublishCamera Publish a camera topic with Image and CameraInfo
+   * @param time Acquisition time stamp
+   */
   void PublishCamera(const ros::Time& time) {
     image_msg_->header.frame_id = frame_id_;
     image_msg_->header.stamp = time;
@@ -68,6 +87,12 @@ class CameraRosBase {
     diagnostic_updater_.update();
   }
 
+  /**
+   * @brief Grab Fill image_msg and cinfo_msg from low level camera driver
+   * @param image_msg Ros message ImagePtr
+   * @param cinfo_msg Ros message CameraInfoPtr
+   * @return True if successful
+   */
   virtual bool Grab(const sensor_msgs::ImagePtr& image_msg,
                     const sensor_msgs::CameraInfoPtr& cinfo_msg) = 0;
 
