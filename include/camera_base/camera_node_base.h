@@ -18,15 +18,15 @@ namespace camera_base {
 template <typename ConfigType>
 class CameraNodeBase {
  public:
-  explicit CameraNodeBase(const ros::NodeHandle& nh)
-      : is_acquire_(false), nh_(nh), cfg_server_(nh) {}
+  explicit CameraNodeBase(const ros::NodeHandle& pnh)
+      : is_acquire_(false), pnh_(pnh), cfg_server_(pnh) {}
 
   CameraNodeBase() = delete;
   CameraNodeBase(const CameraNodeBase&) = delete;
   CameraNodeBase& operator=(const CameraNodeBase&) = delete;
   virtual ~CameraNodeBase() = default;
 
-  const ros::NodeHandle& nh() const { return nh_; }
+  const ros::NodeHandle& nh() const { return pnh_; }
   bool is_acquire() const { return is_acquire_; }
 
   /**
@@ -92,7 +92,7 @@ class CameraNodeBase {
   }
 
   bool is_acquire_;
-  ros::NodeHandle nh_;
+  ros::NodeHandle pnh_;
   std::unique_ptr<ros::Rate> rate_;
   std::unique_ptr<std::thread> acquire_thread_;
   dynamic_reconfigure::Server<ConfigType> cfg_server_;
