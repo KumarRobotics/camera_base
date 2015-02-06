@@ -44,8 +44,10 @@ class CameraRosBase {
         image_msg_(new sensor_msgs::Image()),
         cinfo_msg_(new sensor_msgs::CameraInfo(cinfo_mgr_.getCameraInfo())),
         fps_(10),
+        diagnostic_updater_(pnh_, cnh_),
         topic_diagnostic_(
-            "image_raw", diagnostic_updater_,
+            prefix.empty() ? "image_raw" : (prefix +"/image_raw"),
+            diagnostic_updater_,
             diagnostic_updater::FrequencyStatusParam(&fps_, &fps_, 0.1, 10),
             diagnostic_updater::TimeStampStatusParam(-0.01, 0.1)) {
     pnh_.param<std::string>("frame_id", frame_id_, "camera");
