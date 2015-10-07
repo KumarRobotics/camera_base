@@ -41,12 +41,10 @@ class CameraRosBase {
         camera_pub_(it_.advertiseCamera("image_raw", 1)),
         cinfo_mgr_(cnh_, getParam<std::string>(cnh_, "camera_name"),
                    getParam<std::string>(cnh_, "calib_url")),
-        image_msg_(new sensor_msgs::Image()),
-        cinfo_msg_(new sensor_msgs::CameraInfo(cinfo_mgr_.getCameraInfo())),
-        fps_(10),
+        fps_(10.0),
         diagnostic_updater_(pnh_, cnh_),
         topic_diagnostic_(
-            prefix.empty() ? "image_raw" : (prefix +"/image_raw"),
+            prefix.empty() ? "image_raw" : (prefix + "/image_raw"),
             diagnostic_updater_,
             diagnostic_updater::FrequencyStatusParam(&fps_, &fps_, 0.1, 10),
             diagnostic_updater::TimeStampStatusParam(-0.01, 0.1)) {
@@ -78,13 +76,16 @@ class CameraRosBase {
    * @param time Acquisition time stamp
    */
   void PublishCamera(const ros::Time& time) {
-    image_msg_->header.frame_id = frame_id_;
-    image_msg_->header.stamp = time;
-    if (Grab(image_msg_, cinfo_msg_)) {
+    const auto image_msg = boost::make_shared<sensor_msgs::Image>();
+    const auto cinfo_msg =
+        boost::make_shared<sensor_msgs::CameraInfo>(cinfo_mgr_.getCameraInfo());
+    image_msg->header.frame_id = frame_id_;
+    image_msg->header.stamp = time;
+    if (Grab(image_msg, cinfo_msg)) {
       // Update camera info header
-      cinfo_msg_->header = image_msg_->header;
-      camera_pub_.publish(image_msg_, cinfo_msg_);
-      topic_diagnostic_.tick(image_msg_->header.stamp);
+      cinfo_msg->header = image_msg->header;
+      camera_pub_.publish(image_msg, cinfo_msg);
+      topic_diagnostic_.tick(image_msg->header.stamp);
     }
     diagnostic_updater_.update();
   }
@@ -104,8 +105,6 @@ class CameraRosBase {
   image_transport::ImageTransport it_;
   image_transport::CameraPublisher camera_pub_;
   camera_info_manager::CameraInfoManager cinfo_mgr_;
-  sensor_msgs::ImagePtr image_msg_;
-  sensor_msgs::CameraInfoPtr cinfo_msg_;
   double fps_;
   diagnostic_updater::Updater diagnostic_updater_;
   diagnostic_updater::TopicDiagnostic topic_diagnostic_;

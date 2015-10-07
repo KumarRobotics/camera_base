@@ -26,7 +26,7 @@ class CameraNodeBase {
   CameraNodeBase& operator=(const CameraNodeBase&) = delete;
   virtual ~CameraNodeBase() = default;
 
-  const ros::NodeHandle& nh() const { return pnh_; }
+  const ros::NodeHandle& pnh() const { return pnh_; }
   bool is_acquire() const { return is_acquire_; }
 
   /**
@@ -55,7 +55,7 @@ class CameraNodeBase {
    */
   void ConfigCb(ConfigType& config, int level) {
     if (level < 0) {
-      ROS_INFO("%s: %s", nh().getNamespace().c_str(),
+      ROS_INFO("%s: %s", pnh().getNamespace().c_str(),
                "Initializing reconfigure server");
     }
     if (is_acquire()) {
