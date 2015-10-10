@@ -14,7 +14,7 @@ catkin_package(
     INCLUDE_DIRS include
     LIBRARIES
     CATKIN_DEPENDS camera_info_manager diagnostic_updater dynamic_reconfigure image_transport roscpp sensor_msgs
-    DEPENDS system_lib
+    DEPENDS
     )
 
 include_directories(
