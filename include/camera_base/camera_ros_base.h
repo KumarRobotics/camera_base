@@ -81,7 +81,7 @@ class CameraRosBase {
         boost::make_shared<sensor_msgs::CameraInfo>(cinfo_mgr_.getCameraInfo());
     image_msg->header.frame_id = frame_id_;
     image_msg->header.stamp = time;
-    if (Grab(image_msg, cinfo_msg)) {
+    if (Grab(image_msg)) {
       // Update camera info header
       cinfo_msg->header = image_msg->header;
       camera_pub_.publish(image_msg, cinfo_msg);
@@ -90,14 +90,23 @@ class CameraRosBase {
     diagnostic_updater_.update();
   }
 
+  void Publish(const sensor_msgs::ImagePtr& image_msg) {
+    const auto cinfo_msg =
+        boost::make_shared<sensor_msgs::CameraInfo>(cinfo_mgr_.getCameraInfo());
+    // Update camera info header
+    image_msg->header.frame_id = frame_id_;
+    cinfo_msg->header = image_msg->header;
+    camera_pub_.publish(image_msg, cinfo_msg);
+    topic_diagnostic_.tick(image_msg->header.stamp);
+    diagnostic_updater_.update();
+  }
+
   /**
    * @brief Grab Fill image_msg and cinfo_msg from low level camera driver
    * @param image_msg Ros message ImagePtr
-   * @param cinfo_msg Ros message CameraInfoPtr
    * @return True if successful
    */
-  virtual bool Grab(const sensor_msgs::ImagePtr& image_msg,
-                    const sensor_msgs::CameraInfoPtr& cinfo_msg) = 0;
+  virtual bool Grab(const sensor_msgs::ImagePtr& image_msg) = 0;
 
  private:
   ros::NodeHandle pnh_;
