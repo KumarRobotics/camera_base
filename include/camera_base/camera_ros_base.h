@@ -1,14 +1,14 @@
 #ifndef CAMERA_ROS_BASE_H_
 #define CAMERA_ROS_BASE_H_
 
-#include <ros/ros.h>
-#include <sensor_msgs/Image.h>
-#include <sensor_msgs/CameraInfo.h>
-#include <sensor_msgs/image_encodings.h>
-#include <image_transport/image_transport.h>
 #include <camera_info_manager/camera_info_manager.h>
-#include <diagnostic_updater/publisher.h>
 #include <diagnostic_updater/diagnostic_updater.h>
+#include <diagnostic_updater/publisher.h>
+#include <image_transport/image_transport.h>
+#include <ros/ros.h>
+#include <sensor_msgs/CameraInfo.h>
+#include <sensor_msgs/Image.h>
+#include <sensor_msgs/image_encodings.h>
 
 namespace camera_base {
 
@@ -108,6 +108,10 @@ class CameraRosBase {
    */
   virtual bool Grab(const sensor_msgs::ImagePtr& image_msg,
                     const sensor_msgs::CameraInfoPtr& cinfo_msgs = nullptr) = 0;
+
+ protected:
+  ros::NodeHandle& pnh() { return pnh_; }
+  ros::NodeHandle& cnh() { return cnh_; }
 
  private:
   ros::NodeHandle pnh_;

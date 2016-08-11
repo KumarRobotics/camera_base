@@ -1,11 +1,11 @@
 #ifndef CAMERA_NODE_BASE_H_
 #define CAMERA_NODE_BASE_H_
 
-#include <thread>
 #include <memory>
+#include <thread>
 
-#include <ros/ros.h>
 #include <dynamic_reconfigure/server.h>
+#include <ros/ros.h>
 
 #include "camera_base/camera_ros_base.h"
 
@@ -18,15 +18,15 @@ namespace camera_base {
 template <typename ConfigType>
 class CameraNodeBase {
  public:
-  explicit CameraNodeBase(const ros::NodeHandle& pnh)
+  explicit CameraNodeBase(const ros::NodeHandle &pnh)
       : is_acquire_(false), pnh_(pnh), cfg_server_(pnh) {}
 
   CameraNodeBase() = delete;
-  CameraNodeBase(const CameraNodeBase&) = delete;
-  CameraNodeBase& operator=(const CameraNodeBase&) = delete;
+  CameraNodeBase(const CameraNodeBase &) = delete;
+  CameraNodeBase &operator=(const CameraNodeBase &) = delete;
   virtual ~CameraNodeBase() = default;
 
-  const ros::NodeHandle& pnh() const { return pnh_; }
+  const ros::NodeHandle &pnh() const { return pnh_; }
   bool is_acquire() const { return is_acquire_; }
 
   /**
@@ -53,14 +53,16 @@ class CameraNodeBase {
    * Entering this callback will stop the acquisition thread, do the
    * reconfiguration and restart acquisition thread
    */
-  void ConfigCb(ConfigType& config, int level) {
+  void ConfigCb(ConfigType &config, int level) {
     if (level < 0) {
       ROS_INFO("%s: %s", pnh().getNamespace().c_str(),
                "Initializing reconfigure server");
     }
+
     if (is_acquire()) {
       Stop();
     }
+
     Setup(config);
     SetRate(config.fps);
     Start();
@@ -75,7 +77,7 @@ class CameraNodeBase {
    * @brief Setup Setup your camera here
    * @param config Config type
    */
-  virtual void Setup(ConfigType& config) = 0;
+  virtual void Setup(ConfigType &config) = 0;
 
  private:
   void SetRate(double fps) { rate_.reset(new ros::Rate(fps)); }
