@@ -1,11 +1,10 @@
-#ifndef CAMERA_NODE_BASE_H_
-#define CAMERA_NODE_BASE_H_
+#pragma once
 
-#include <thread>
-#include <memory>
-
-#include <ros/ros.h>
 #include <dynamic_reconfigure/server.h>
+#include <ros/ros.h>
+
+#include <memory>
+#include <thread>
 
 #include "camera_base/camera_ros_base.h"
 
@@ -99,5 +98,3 @@ class CameraNodeBase {
 };
 
 }  // namespace camera_base
-
-#endif  // CAMERA_NODE_BASE_H_

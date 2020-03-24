@@ -1,14 +1,13 @@
-#ifndef CAMERA_ROS_BASE_H_
-#define CAMERA_ROS_BASE_H_
+#pragma once
 
-#include <ros/ros.h>
-#include <sensor_msgs/Image.h>
-#include <sensor_msgs/CameraInfo.h>
-#include <sensor_msgs/image_encodings.h>
-#include <image_transport/image_transport.h>
 #include <camera_info_manager/camera_info_manager.h>
-#include <diagnostic_updater/publisher.h>
 #include <diagnostic_updater/diagnostic_updater.h>
+#include <diagnostic_updater/publisher.h>
+#include <image_transport/image_transport.h>
+#include <ros/ros.h>
+#include <sensor_msgs/CameraInfo.h>
+#include <sensor_msgs/Image.h>
+#include <sensor_msgs/image_encodings.h>
 
 namespace camera_base {
 
@@ -123,5 +122,3 @@ class CameraRosBase {
 };
 
 }  // namespace camera_base
-
-#endif  // ROS_CAMERA_BASE_H_
